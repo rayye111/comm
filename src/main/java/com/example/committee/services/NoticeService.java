@@ -2,6 +2,7 @@ package com.example.committee.services;
 
 import com.example.committee.entities.Notice;
 import com.example.committee.repositories.NoticeRepository;
+import com.example.committee.entities.Resident;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,17 @@ import java.util.Optional;
 public class NoticeService {
     @Autowired
     private NoticeRepository noticeRepository;
+    // 发布公告并关联发布者
+    public Notice saveNoticeWithPublisher(Notice notice, Resident publisher) {
+        notice.setPublisherId(publisher);
+        return noticeRepository.save(notice);
+    }
     //发布公告
+    /*
     public Notice saveNotice(Notice notice){
         return noticeRepository.save(notice);
     }
+    */
     //id查找公告
     public Optional<Notice> getNoticeById(Integer id){
         return noticeRepository.findById(id);

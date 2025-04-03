@@ -1,25 +1,43 @@
 package com.example.committee.controllers;
 
 import com.example.committee.entities.Notice;
+import com.example.committee.entities.Resident;
 import com.example.committee.services.NoticeService;
+import com.example.committee.services.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/notices")
 public class NoticeController {
     @Autowired
     private NoticeService noticeService;
+    @Autowired
+    private ResidentService residentService;
+    // 发布公告并关联发布者
+    @PostMapping("/withPublisher/{publisherId}")
+    public ResponseEntity<Notice> addNoticeWithPublisher(@RequestBody Notice notice, @PathVariable Integer publisherId) {
+        Optional<Resident> publisherOptional = residentService.getResidentById(publisherId);
+        if (publisherOptional.isPresent()) {
+            Resident publisher = publisherOptional.get();
+            Notice savedNotice = noticeService.saveNoticeWithPublisher(notice, publisher);
+            return new ResponseEntity<>(savedNotice, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     //发布公告
+    /*
     @PostMapping
     public ResponseEntity<Notice> addNotice(@RequestBody Notice notice){
         Notice savedNotice = noticeService.saveNotice(notice);
         return new ResponseEntity<>(savedNotice, HttpStatus.CREATED);
     }
+     */
     //id查找公告
     @GetMapping("/{id}")
     public ResponseEntity<Notice> getNoticeById(@PathVariable Integer id){

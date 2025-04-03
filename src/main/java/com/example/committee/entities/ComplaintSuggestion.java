@@ -16,6 +16,7 @@ public class ComplaintSuggestion {
     private Date submitDate = new Date();
     private String type;
     private Boolean isHandled;
+    private String message;
     @ManyToOne
     private Resident handler;
 
@@ -49,27 +50,40 @@ public class ComplaintSuggestion {
         return handler;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     //setters
-    public void setCsId(Integer csId){
+    public void setCsId(Integer csId) {
         this.csId = csId;
     }
-    public void setResidentId(Resident residentId){
+
+    public void setResidentId(Resident residentId) {
         this.residentId = residentId;
     }
-    public void setContent(String content){
+
+    public void setContent(String content) {
         this.content = content;
     }
-    public void setSubmitDate(Date submitDate){
+
+    public void setSubmitDate(Date submitDate) {
         this.submitDate = submitDate;
     }
-    public void setType(String type){
-        this.type= type;
+
+    public void setType(String type) {
+        this.type = type;
     }
-    public void setIsHandled(Boolean isHandled){
+
+    public void setIsHandled(Boolean isHandled) {
         this.isHandled = isHandled;
     }
-    public void setHandler(Resident handler){
+
+    public void setHandler(Resident handler) {
         this.handler = handler;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

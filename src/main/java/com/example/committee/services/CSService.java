@@ -30,6 +30,20 @@ public class CSService {
     public List<ComplaintSuggestion> getCSByResidentId(Integer id){
         return csRepository.findByResidentId_ResidentId(id);
     }
+    //创建投诉建议并关联居民
+    public ComplaintSuggestion createComplaintSuggestionWithResidents(Resident submitter, Resident handler, String content, String type) {
+        System.out.println("进入服务层创建方法"); // 新增日志
+        ComplaintSuggestion complaintSuggestion = new ComplaintSuggestion();
+        complaintSuggestion.setContent(content);
+        complaintSuggestion.setType(type);
+        complaintSuggestion.setIsHandled(false);
+
+        // 建立关联
+        complaintSuggestion.setResidentId(submitter);
+        complaintSuggestion.setHandler(handler);
+
+        return csRepository.save(complaintSuggestion);
+    }
     //处理cs
     public List<ComplaintSuggestion> handleCS(Integer id, Resident handler){
         Optional<ComplaintSuggestion> optionalCS = csRepository.findById(id);
