@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>resident</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//unpkg.com/layui@2.9.18/dist/css/layui.css" rel="stylesheet">
+</head>
+<body>
+<!--添加的表单-->
+<form class="layui-form" action="" style="display: none; padding:15px;" id="addForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_name" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_gender" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_age" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_address" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系方式</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_phoneNumber" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="addBtn">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!--添加的表单 结束-->
+
+<!--修改的表单-->
+<form class="layui-form" action="" style="display: none; padding:15px;" id="updateForm" lay-filter="updateForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">id</label>
+        <div class="layui-input-block">
+            <input type="text" name="id" readonly lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_name" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_gender" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_age" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_address" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系方式</label>
+        <div class="layui-input-block">
+            <input type="text" name="resident_phoneNumber" lay-verify="required" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit lay-filter="updateBtn">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!--修改的表单 结束-->
+
+<!--表格容器-->
+<div style="padding: 16px;">
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
+
+
+<!--头部工具条-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    </div>
+</script>
+
+
+<!--行内工具条-->
+<script type="text/html" id="toolDemo">
+    <div class="layui-clear-space">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="del">删除</a>
+    </div>
+</script>
+
+<!-- 引入layui的脚本 -->
+<script src="//unpkg.com/layui@2.9.18/dist/layui.js"></script>
+<script>
+    layui.use(['table', 'dropdown'], function () {
+        var table = layui.table;
+        var dropdown = layui.dropdown;
+        var $ = layui.$;
+        var form = layui.form;
+
+        // 表单的提交事件监听--------添加
+        form.on('submit(addBtn)', function (data) {
+            var field = data.field; // 获取表单字段值
+            // 此处可执行 Ajax 等操作
+            $.ajax({
+                url: "/residents/",
+                method: "post",
+                contentType: 'application/json',
+                data: JSON.stringify(field),
+                dataType: "json",
+                success: function (res) {
+                    if (res.code == 200) {
+                        layer.closeAll(); // 关闭所有类型的层
+                        table.reload("test", {})
+                    } else {
+                        layer.msg(res.msg)
+                    }
+                }
+            })
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        // 表单的提交事件监听--------修改
+        form.on('submit(updateBtn)', function (data) {
+            var field = data.field; // 获取表单字段值
+            // 此处可执行 Ajax 等操作
+            $.ajax({
+                url: "/residents/",
+                method: "put",
+                contentType: 'application/json',
+                data: JSON.stringify(field),
+                dataType: "json",
+                success: function (res) {
+                    if (res.code == 200) {
+                        layer.closeAll(); // 关闭所有类型的层
+                        table.reload("test", {}); //表格重载
+                    } else {
+                        layer.msg(res.msg)
+                    }
+                }
+            })
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        // 表格渲染
+        table.render({
+            elem: '#test',
+            url: '/residents/', // 请求接口
+            toolbar: '#toolbarDemo',
+            height: 'full-55', // 最大高度减去其他容器已占有的高度差
+            cellMinWidth: 80,
+            page: true,
+            cols: [[   //表头
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', fixed: 'left', width: 20, title: 'ID', sort: true, totalRow: '合计：'},
+                {field: 'resident_name', width: 20, title: '姓名', align: 'center'},
+                {field: 'resident_gender', width: 20, title: '性别', align: 'center'},
+                {field: 'resident_age', width: 20, title: '年龄', align: 'center'},
+                {field: 'resident_address', width: 200, title: '地址', align: 'center'},
+                {field: 'resident_phoneNumber', width: 200, title: '联系方式', align: 'center'},
+                {fixed: 'right', title: '操作', width: 20, templet: '#toolDemo', align: 'center'}
+            ]]
+        });
+
+
+        // 头部工具栏事件监听
+        table.on('toolbar(test)', function (obj) {
+            var id = obj.config.id;
+            var checkStatus = table.checkStatus(id);
+            var othis = lay(this);
+            switch (obj.event) {
+                case 'add':
+                    // 弹窗
+                    layer.open({
+                        type: 1, // page 层类型
+                        area: ['500px', '300px'],
+                        title: '添加',
+                        shadeClose: true, // 点击遮罩区域，关闭弹层
+                        maxmin: true, // 允许全屏最小化
+                        anim: 0, // 0-6 的动画形式，-1 不开启
+                        content: $("#addForm")
+                    });
+                    break;
+
+            }
+            ;
+        });
+
+
+        // 行内工具栏事件监听
+        table.on('tool(test)', function (obj) { // 双击 toolDouble
+            var data = obj.data; // 获得当前行数据
+            // console.log(obj)
+            if (obj.event === 'edit') {
+                //给表单赋值
+                form.val("updateForm", data)
+                //弹窗
+                layer.open({
+                    title: '编辑 - id:' + data.id,
+                    type: 1,
+                    area: ['80%', '80%'],
+                    content: $("#updateForm")
+                });
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行 [id: ' + data.id + '] 么', function (index) {
+                    obj.del(); // 删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    // 向服务端发送删除指令
+                    $.ajax({
+                        url: "/residents/",
+                        method: "delete",
+                        data: {id: data.id},
+                        dataType: "json",
+                        success: function (res) {
+                            alert(res.msg)
+                        }
+                    })
+
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
